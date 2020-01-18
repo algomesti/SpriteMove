@@ -1,44 +1,29 @@
 import createKeyboardListener from './keyboardListener.js'
 import createPlayer from './player.js'
 import createStage from './stage.js'
-export default function createGame(document, playerId) {
-    
-    const state = {
-        players : [],
-        stage : NaN
-    }
-    
+export default function createGame(document) {
+        
     const cnv = document.querySelector('canvas')
     const ctx = cnv.getContext('2d')
-    const player = createPlayer(playerId)
-    player.subscribe(update)
+    const player = createPlayer()
+    const stage = createStage(1)
 
-    state.players.push(player)
-    state.stage = createStage(1)
-
-    const keyboardListener = createKeyboardListener(document, player)
-    //keyboardListener.subscribe(player.setMove)
-
-    keyboardListener.subscribe(player.manageAction)
-
-
-    function start() {    
+    function start() {   
+        createKeyboardListener(document, player) 
         loop()             
     }
 
     function update () {
-       // player.move()   
+        player.manageAction()   
     }
 
     function render() { 
         ctx.clearRect(0, 0, cnv.width, cnv.height)
-        state.stage.draw(ctx, cnv)
-        for (const player of state.players) {
-            player.draw(ctx, cnv)
-        }
+        stage.draw(ctx, cnv)
+        player.draw(ctx, cnv)
     }
 
-    const loop = function() {
+    function loop() {
         window.requestAnimationFrame(loop, cnv)
         update()
         render()

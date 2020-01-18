@@ -1,8 +1,6 @@
-export default function createPlayer(playerId) {
+export default function createPlayer() {
 
-    console.log('criou')
     const state = {
-        playerId: NaN,
         position: {
             x: 0,
             y: 0
@@ -20,7 +18,7 @@ export default function createPlayer(playerId) {
             mvlRight: 0,
             mvDown: 0, 
         },
-        speed: 5,
+        speed: 1,
         move : {
             37: 'mvLeft',
             38: 'mvUp',
@@ -29,8 +27,6 @@ export default function createPlayer(playerId) {
         },
         countAnime: 0
     }
-    const observers = []
-    state.playerId = playerId
     state.image.src = '../img/player.png'
     
 
@@ -46,8 +42,6 @@ export default function createPlayer(playerId) {
             state.width,
             state.height
         )
-      //  console.log(`moveu para x: ${state.position.x}`)
-       // console.log(`moveu para y: ${state.position.y}`)
         animation()
     }
     
@@ -63,12 +57,6 @@ export default function createPlayer(playerId) {
 
     function getState() {
         return state
-    }
-
-
-    
-    function subscribe(observerFunction) {
-        observers.push(observerFunction)
     }
 
     function manageAction(command) {
@@ -89,20 +77,9 @@ export default function createPlayer(playerId) {
             state.position.y += state.speed
             state.fragmentSprite.y = state.height * 0
         }
-        __notify({
-            type: 'move'
-        })
-
-    }
-
-    function __notify(command) {
-        for (const observerFunction of observers) {
-            observerFunction(command)
-        }
     }
 
     return {
-        subscribe,
         manageAction,
         draw,
         getState,
